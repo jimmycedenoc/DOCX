@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>docxJS</title>
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+		}
+		
+		body {
+			padding: 30px;
+			font-family: Arial, Helvetica;
+		}
+		
+		h1, h2, h3, h4 {
+			margin-bottom: 0.7em;
+		}
+		
+		p {
+			margin-bottom: 1em;
+		}
+	</style>
+	<!-- Include dependencies -->
+	
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script type="text/javascript" src="./libs/base64.js"></script>
+	<script type="text/javascript" src="./libs/jszip/jszip.js"></script>
+	
+	<!-- Include main js lib -->
+	<script type="text/javascript" src="DOCX.js"></script>
+
+</head>
+<body>
+	<h1>DOCX.js Test Page</h1>
+	<p>This is the DOCX.js test page.</p>
+	
+	<script>
+	
+	function test() {
+		var doc = new DOCXjs();
+		doc.text('DOCX.js is a free open source library for generating Microsoft Word Documents using pure client-side JavaScript.');
+		doc.text('It was developed by James Hall at Snapshot Media.');
+		var output = doc.output('datauri');
+		
+	}
+	</script>
+	<p><a href="javascript:test()">Run Test</a></p>
+</body>
+</html>
