@@ -89,25 +89,55 @@ var DOCXjs = function() {
 	var documentGen = function() {
 		
 		// Headers 
-		var output = '<w:document xmlns:ve="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml"><w:body>';
+		var output = `<?xml version="1.0" encoding="UTF-8"?>
+			<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:ve="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"><w:body>`;
 		
 		
 		// Paragraphs
-		
+
 		for (var textElement in textElements) {
-			output += '<w:p w:rsidR="001A6335" w:rsidRDefault="00EA68DC" w:rsidP="00EA68DC">';
-			output += '<w:r w:rsidRPr="00C703AC">';
-			output += '<w:rPr>';
-			output += '<w:lang w:val="en-GB_tradnl"/>';
-			output += '</w:rPr>';
-			output += '<w:t xml:space="preserve">';
-			output += textElements[textElement];
-			output += '</w:t>';
-			output += '</w:r>';
-			output += '</w:p>';
-			
+				output += `
+					<w:p w:rsidR="00585F72" w:rsidRDefault="004A1AFE" w:rsidP="00585F72">
+					<w:pPr>						
+						${textElements[textElement].style.center ? '<w:jc w:val="center" />': ''}
+						${textElements[textElement].style.bulletPoint ? '<w:pStyle w:val="Prrafodelista" /><w:numPr><w:ilvl w:val="0" /><w:numId w:val="1" /></w:numPr>' : ''}
+						<w:rPr>
+							${textElements[textElement].style.bold ? '<w:b />': ''}
+							<w:lang w:val="es-ES" />
+						</w:rPr>
+					</w:pPr>
+					${textElements[textElement].style.bulletPoint ? '<w:proofErr w:type="spellStart" />': ''}
+					<w:r w:rsidRPr="00E8044B">
+						<w:rPr>
+							${textElements[textElement].style.bold ? '<w:b />': ''}
+							${textElements[textElement].style.size ? '<w:sz w:val="' + textElements[textElement].style.size * 2 + '" />': ''}
+							<w:lang w:val="es-ES" />
+						</w:rPr>
+						`;
+						let texts = textElements[textElement].text.split(/\<|\>/g);
+						for(let i = 0; i<texts.length; i++){
+							output += `<w:r w:rsidRPr="008D2CA6">
+									<w:rPr>
+										${texts[i].substr(0,1) === '|' && texts[i].substr(texts[i].length-1,1) ? '<w:b />': ''}
+										<w:lang w:val="es-ES" />
+									</w:rPr>
+									<w:t>${texts[i].substr(0,1) === '|' && texts[i].substr(texts[i].length-1,1) ? texts[i].substr(1, texts[i].length-2) : texts[i]}</w:t>
+								</w:r>
+								<w:r>
+									<w:rPr>
+										<w:b />
+										<w:lang w:val="es-ES" />
+									</w:rPr>
+									<w:t xml:space="preserve"> </w:t>
+								</w:r>`;
+							
+						}
+						
+						output += `</w:r>
+						${textElements[textElement].style.bulletPoint ? '<w:proofErr w:type="spellEnd" />': ''}
+					</w:p>
+				`;
 		}
-		
 		
 		
 		// Bottom section
@@ -168,7 +198,6 @@ var DOCXjs = function() {
 		}
 		
 		for(var file in files) {
-			console.log(file);
 			if (files[file] == 'word/document.xml') {
 				zip.add('word/document.xml', documentGen());
 				file_count_current ++;
@@ -193,8 +222,8 @@ var DOCXjs = function() {
 	
 	// Add content methods
 	
-	var addText = function(string) {
-		textElements.push(string);
+	var addText = function(text, style) {
+		textElements.push({text, style});
 	}
 	
 	var finalFile = function(parts) {
@@ -220,8 +249,8 @@ var DOCXjs = function() {
 			}
 		// @TODO: Add different output options
 		},
-		text: function(string) {
-			addText(string);
+		text: function(string, style) {
+			addText(string, style);
 		}
 	};
 	
