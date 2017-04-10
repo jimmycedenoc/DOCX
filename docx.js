@@ -100,7 +100,7 @@ var DOCXjs = function() {
 					<w:pPr>						
 						${textElements[textElement].style.center ? '<w:jc w:val="center" />': ''}
 						${textElements[textElement].style.bulletPoint ? '<w:pStyle w:val="Prrafodelista" /><w:numPr><w:ilvl w:val="0" /><w:numId w:val="' + 
-							textElements[textElement].style.bulletPoint.idGroup || 1 + 
+							textElements[textElement].style.bulletPoint.idGroup + 
 						'" /></w:numPr>' : ''}
 						<w:rPr>
 							${textElements[textElement].style.bold ? '<w:b />': ''}
