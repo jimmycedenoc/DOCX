@@ -8,9 +8,13 @@ Es una extension a la libreria MrRio/DOCX.js, basicamente lo que se aumento es p
 Forma de usar:
 
 var doc = new DOCXjs();
+
 var option = {};
+
 doc.text('texto a escribir', options);
+
 doc.text('It was developed by James Hall at Snapshot Media.', {});
+
 doc.output('datauri');
 
 
