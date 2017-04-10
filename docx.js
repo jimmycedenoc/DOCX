@@ -94,13 +94,14 @@ var DOCXjs = function() {
 		
 		
 		// Paragraphs
-
 		for (var textElement in textElements) {
 				output += `
 					<w:p w:rsidR="00585F72" w:rsidRDefault="004A1AFE" w:rsidP="00585F72">
 					<w:pPr>						
 						${textElements[textElement].style.center ? '<w:jc w:val="center" />': ''}
-						${textElements[textElement].style.bulletPoint ? '<w:pStyle w:val="Prrafodelista" /><w:numPr><w:ilvl w:val="0" /><w:numId w:val="1" /></w:numPr>' : ''}
+						${textElements[textElement].style.bulletPoint ? '<w:pStyle w:val="Prrafodelista" /><w:numPr><w:ilvl w:val="0" /><w:numId w:val="' + 
+							textElements[textElement].style.bulletPoint.idGroup || 1 + 
+						'" /></w:numPr>' : ''}
 						<w:rPr>
 							${textElements[textElement].style.bold ? '<w:b />': ''}
 							<w:lang w:val="es-ES" />
