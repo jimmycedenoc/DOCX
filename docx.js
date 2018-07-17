@@ -263,7 +263,7 @@ var DOCXjs = function() {
 	// Add content methods
 	
 	var addText = function(text, style) {
-		textElements.push([text, style]);
+		textElements.push({text: text, style: style});
 	}
 	
 	var finalFile = function(parts) {
